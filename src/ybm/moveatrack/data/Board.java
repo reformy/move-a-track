@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.kwazylabs.utils.Pair;
-
 import ybm.moveatrack.MoveATrackException;
 import ybm.moveatrack.data.TrackCard.Direction;
 import ybm.moveatrack.data.TrackCard.Rotation;
@@ -19,15 +17,16 @@ public class Board implements Serializable
 	private TrackCard[][] mat;
 	
 	/**
-	 * The playing players, each mapped to its location on the board. If the first
-	 * coordinate is -1, the player is not on board (won?).
+	 * The playing players, each mapped to its state on the board.
 	 */
-	private Map<Player, Pair<Integer, Integer>> players = new HashMap<Player, Pair<Integer, Integer>>();
+	private Map<Player, PlayerState> players = new HashMap<Player, PlayerState>();
 	
 	public Board(int size)
 	{
 		this.size = size;
 		this.mat = new TrackCard[size][size];
+		homeRows = new int[] { 0, 0, size - 1, size - 1 };
+		homeCols = new int[] { 0, size - 1, 0, size - 1 };
 	}
 	
 	public TrackCard pushRow(TrackCard newCard, int rowIndex, boolean forward)
@@ -133,5 +132,41 @@ public class Board implements Serializable
 	public TrackCard getCell(int row, int col)
 	{
 		return mat[row][col];
+	}
+	
+	final int homeRows[];
+	final int homeCols[];
+	
+	public void addPlayer(Player player)
+	{
+		PlayerState state = new PlayerState(homeRows[players.size()],
+		    homeCols[players.size()]);
+		players.put(player, state);
+	}
+	
+	public static class PlayerState
+	{
+		private int row;
+		private int col;
+		public final int homeRow;
+		public final int homeCol;
+		
+		PlayerState(int homeRow, int homeCol)
+		{
+			this.homeRow = homeRow;
+			this.homeCol = homeCol;
+			row = homeRow;
+			col = homeCol;
+		}
+		
+		public int getRow()
+		{
+			return row;
+		}
+		
+		public int getCol()
+		{
+			return col;
+		}
 	}
 }

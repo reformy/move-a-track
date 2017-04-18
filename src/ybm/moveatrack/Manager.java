@@ -30,6 +30,8 @@ public class Manager
 		Collections.shuffle(trackCards);
 		
 		outTrackCard = board.init(trackCards);
+		
+		//board.addPlayer();
 	}
 	
 	public static void main(String[] args) throws Exception
