@@ -2,6 +2,7 @@ package ybm.moveatrack.data;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +26,9 @@ public class Board implements Serializable
 	{
 		this.size = size;
 		this.mat = new TrackCard[size][size];
-		homeRows = new int[] { 0, 0, size - 1, size - 1 };
-		homeCols = new int[] { 0, size - 1, 0, size - 1 };
+		homes = new BoardPosition[] { new BoardPosition(0, 0),
+		    new BoardPosition(0, size - 1), new BoardPosition(size - 1, 0),
+		    new BoardPosition(size - 1, size - 1) };
 	}
 	
 	public TrackCard pushRow(TrackCard newCard, int rowIndex, boolean forward)
@@ -134,39 +136,33 @@ public class Board implements Serializable
 		return mat[row][col];
 	}
 	
-	final int homeRows[];
-	final int homeCols[];
+	public Map<Player, PlayerState> getPlayers()
+	{
+		return Collections.unmodifiableMap(players);
+	}
+	
+	final BoardPosition homes[];
 	
 	public void addPlayer(Player player)
 	{
-		PlayerState state = new PlayerState(homeRows[players.size()],
-		    homeCols[players.size()]);
+		PlayerState state = new PlayerState(homes[players.size()]);
 		players.put(player, state);
 	}
 	
 	public static class PlayerState
 	{
-		private int row;
-		private int col;
-		public final int homeRow;
-		public final int homeCol;
+		private BoardPosition position;
+		public final BoardPosition home;
 		
-		PlayerState(int homeRow, int homeCol)
+		PlayerState(BoardPosition home)
 		{
-			this.homeRow = homeRow;
-			this.homeCol = homeCol;
-			row = homeRow;
-			col = homeCol;
+			this.home = home.clone();
+			position = home.clone();
 		}
 		
-		public int getRow()
+		public BoardPosition getPosition()
 		{
-			return row;
-		}
-		
-		public int getCol()
-		{
-			return col;
+			return position;
 		}
 	}
 }

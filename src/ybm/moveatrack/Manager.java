@@ -6,6 +6,8 @@ import java.util.List;
 import com.kwazylabs.utils.StdinUtils;
 
 import ybm.moveatrack.data.Board;
+import ybm.moveatrack.data.BoardPosition;
+import ybm.moveatrack.data.Player;
 import ybm.moveatrack.data.Target;
 import ybm.moveatrack.data.TargetCard;
 import ybm.moveatrack.data.TrackCard;
@@ -32,6 +34,12 @@ public class Manager
 		outTrackCard = board.init(trackCards);
 		
 		//board.addPlayer();
+	}
+	
+	private TrackCard playerMove(Player player) throws MoveATrackException
+	{
+		BoardPosition playerPushPosition = player.play(outTrackCard);
+		// TODO board.push what?
 	}
 	
 	public static void main(String[] args) throws Exception
